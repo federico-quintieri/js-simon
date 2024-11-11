@@ -7,8 +7,8 @@ const generaBtn = document.getElementById("btnGenera");
 // Assegna numeri random agli elementi di arrayH1
 assegnaRandomNumber(arrayH1);
 let varTimeout = setTimeout(() => {
-  console.log("Sono passati 30 secondi");
-}, 30 * 1000);
+  resetNumbers(arrayH1);
+}, 5 * 1000);
 
 // Al click del bottone rigenera i numeri random
 generaBtn.addEventListener("click", () => {
@@ -17,9 +17,21 @@ generaBtn.addEventListener("click", () => {
   clearTimeout(varTimeout);
   // Assegno nuovo timeout
   varTimeout = setTimeout(() => {
-    console.log("Sono passati 30 secondi");
+    resetNumbers(arrayH1);
   }, 5 * 1000);
 });
+
+/**
+ * Resetta inner text elementi array passato
+ * @param {array} arrayElementi
+ * @returns {none}
+ */
+function resetNumbers(arrayElementi) {
+  for (let i = 0; i < arrayElementi.length; i++) {
+    const currElem = arrayElementi[i];
+    arrayElementi[i].innerText = "";
+  }
+}
 
 /**
  * Assegna numeri random ad array elementi
