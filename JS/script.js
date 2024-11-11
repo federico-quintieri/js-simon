@@ -14,9 +14,18 @@ const convalidaBtn = document.getElementById("btnConvalida");
 const form = document.querySelector("form");
 // console.log(form);
 
+// Array globale per salvare i numeri
+let arrNumeri = null;
+
 // Assegna numeri random agli elementi di arrayH1
 assegnaRandomNumber(arrayH1);
+
+// Timeout
 let varTimeout = setTimeout(() => {
+  // Salvo i numeri in un array
+  arrNumeri = arrayNumeri(arrayH1);
+  //   console.log(arrNumeri);
+
   resetNumbers(arrayH1);
   inserisciInput(arrayDiv);
   generaBtn.classList.add("d-none");
@@ -25,11 +34,13 @@ let varTimeout = setTimeout(() => {
 
 // Al click del bottone rigenera i numeri random
 generaBtn.addEventListener("click", () => {
+  event.preventDefault();
   assegnaRandomNumber(arrayH1);
   // Libero variabile timeout iniziale
   clearTimeout(varTimeout);
   // Assegno nuovo timeout
   varTimeout = setTimeout(() => {
+    arrNumeri = arrayNumeri(arrayH1);
     resetNumbers(arrayH1);
     inserisciInput(arrayDiv);
     generaBtn.classList.add("d-none");
@@ -37,10 +48,67 @@ generaBtn.addEventListener("click", () => {
   }, 5 * 1000);
 });
 
-form.addEventListener("submit", (event) => {
+// Al click di convalida devo inserire il risultato
+convalidaBtn.addEventListener("click", (event) => {
   event.preventDefault();
-  console.log("Ho inviato il form");
+  // Qui prendo un array di elementi input
+  const arrInput = document.querySelectorAll("input");
+  //   console.log(arrInput);
+
+  const arrInputValues = arrayValoriInput(arrInput);
+
+  inserisciRisultato(arrayDiv, arrNumeri, arrInputValues);
+  convalidaBtn.classList.add("d-none");
 });
+
+/**
+ * Ritorna un array con i valori inseriti negli input
+ * @param {array} arrayElementi
+ * @param {array} arraydaPopolare
+ * @returns {array}
+ */
+function arrayValoriInput(arrayElementi) {
+  const arraydaPopolare = [];
+  for (let i = 0; i < arrayElementi.length; i++) {
+    // Popolo array nuovo prendendo i valori dell'array elementi
+    arraydaPopolare[i] = parseInt(arrayElementi[i].value);
+    console.log(arraydaPopolare[i]);
+  }
+  return arraydaPopolare;
+}
+
+/**
+ * Description
+ * @param {array} arrayElementi
+ * @param {array} arraydaPopolare
+ * @returns {array}
+ */
+function arrayNumeri(arrayElementi) {
+  const arraydaPopolare = [];
+  for (let i = 0; i < arrayElementi.length; i++) {
+    // Popolo array nuovo prendendo i valori dell'array elementi
+    arraydaPopolare[i] = parseInt(arrayElementi[i].innerText);
+    // console.log(arraydaPopolare[i]);
+  }
+  return arraydaPopolare;
+}
+
+/**
+ * Inserisci risultato
+ * @param {array} arrayElementi
+ * @returns {none}
+ */
+function inserisciRisultato(arrayElementi, arrayRisultato, arrayNumeriDiInput) {
+  for (let i = 0; i < arrayElementi.length; i++) {
+    if (arrayRisultato[i] == arrayNumeriDiInput[i]) {
+      arrayElementi[i].innerHTML = `<h1>${arrayRisultato[i]}</h1>`;
+      arrayElementi[i].classList.add("bg-success", "m-3", "rounded");
+    } else if (arrayRisultato[i] !== arrayNumeriDiInput[i]) {
+      arrayElementi[i].innerHTML = `<h1>${arrayRisultato[i]}</h1>`;
+      arrayElementi[i].classList.add("bg-danger", "m-3", "rounded");
+    }
+  }
+}
 
 /**
  * Inserisci input in ogni elemento dell'array passato come parametro
@@ -48,14 +116,10 @@ form.addEventListener("submit", (event) => {
  * @returns {none}
  */
 function inserisciInput(arrayElementi) {
-  console.log("Sono dentro alla funzione per inserire gli input");
   for (let i = 0; i < arrayElementi.length; i++) {
-    const currElem = arrayElementi[i];
-
     arrayElementi[i].innerHTML = `<input type="number">`;
   }
 }
-
 /**
  * Resetta inner text elementi array passato
  * @param {array} arrayElementi
@@ -63,7 +127,6 @@ function inserisciInput(arrayElementi) {
  */
 function resetNumbers(arrayElementi) {
   for (let i = 0; i < arrayElementi.length; i++) {
-    const currElem = arrayElementi[i];
     arrayElementi[i].innerText = "";
   }
 }
@@ -75,7 +138,6 @@ function resetNumbers(arrayElementi) {
  */
 function assegnaRandomNumber(arrayElementi) {
   for (let i = 0; i < arrayElementi.length; i++) {
-    const currElem = arrayElementi[i];
     arrayElementi[i].innerText = getRndInteger(1, 10);
   }
 }
