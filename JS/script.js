@@ -14,6 +14,9 @@ const convalidaBtn = document.getElementById("btnConvalida");
 const form = document.querySelector("form");
 // console.log(form);
 
+// Prendo l'elemento testo che mostrerà la somma dei risultati
+const h3Result = document.getElementById("testoRisultato");
+
 // Array globale per salvare i numeri
 let arrNumeri = null;
 
@@ -99,15 +102,19 @@ function arrayNumeri(arrayElementi) {
  * @returns {none}
  */
 function inserisciRisultato(arrayElementi, arrayRisultato, arrayNumeriDiInput) {
+  let contatore = 0;
   for (let i = 0; i < arrayElementi.length; i++) {
     if (arrayRisultato[i] == arrayNumeriDiInput[i]) {
       arrayElementi[i].innerHTML = `<h1>${arrayRisultato[i]}</h1>`;
       arrayElementi[i].classList.add("bg-success", "m-3", "rounded");
+      contatore++;
     } else if (arrayRisultato[i] !== arrayNumeriDiInput[i]) {
       arrayElementi[i].innerHTML = `<h1>${arrayRisultato[i]}</h1>`;
       arrayElementi[i].classList.add("bg-danger", "m-3", "rounded");
     }
   }
+  h3Result.innerText = `Ne hai presi ${contatore}`;
+  h3Result.classList.remove("d-none");
 }
 
 /**
